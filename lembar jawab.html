@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>LJK SAS 2 - SD Anugerah Abadi 1</title>
+    <style id="page-style">
+        @page { size: A4; margin: 0; }
+    </style>
+    <style>
+        @media screen {
+            body { background-color: #f0f0f0; display: flex; flex-direction: column; align-items: center; padding: 20px; font-family: sans-serif; }
+            .control-panel { background: white; padding: 20px; border-radius: 8px; width: 210mm; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); box-sizing: border-box; }
+            .page { box-shadow: 0 0 20px rgba(0,0,0,0.2); margin-bottom: 20px; }
+        }
+
+        @media print {
+            body { background: white; margin: 0; padding: 0; }
+            .control-panel { display: none; }
+            .page { border: none; box-shadow: none; page-break-after: always; }
+            .page:last-child { page-break-after: auto; }
+        }
+
+        .page {
+            width: 210mm;
+            background: white;
+            padding: 10mm 15mm; 
+            position: relative;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .size-a4 { height: 296.5mm; } 
+        .size-f4 { height: 329.5mm; }
+
+        .header { text-align: center; border-bottom: 3px double black; padding-bottom: 5px; margin-bottom: 15px; }
+        .header h1 { margin: 0; font-size: 16pt; }
+        
+        .student-box { border: 1.5px solid black; padding: 12px; margin-bottom: 15px; }
+        .info-table { width: 100%; border-collapse: collapse; }
+        .info-table td { font-size: 11pt; padding: 5px 0; white-space: nowrap; }
+        
+        .label-wide { width: 115px; font-weight: bold; } 
+        .label-short { width: 65px; font-weight: bold; padding-left: 25px; }
+
+        /* PG STYLE */
+        .answer-wrapper { display: flex; justify-content: center; width: 100%; }
+        .column { flex: 1; display: flex; flex-direction: column; align-items: center; }
+        .question-row { display: flex; align-items: center; margin-bottom: 11px; }
+        .q-num { width: 30px; font-weight: bold; text-align: right; margin-right: 15px; font-size: 11pt; }
+        .options { display: flex; gap: 10px; }
+        .box { width: 8.2mm; height: 8.2mm; border: 1.5px solid black; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 10pt; }
+
+        /* URAIAN STYLE (KOTAK KOSONG) */
+        .uraian-title { font-weight: bold; margin-bottom: 10px; font-size: 12pt; }
+        .kotak-uraian {
+            flex-grow: 1;
+            width: 100%;
+            border: 1.5px solid black;
+            margin-bottom: 10mm;
+            background: transparent;
+        }
+
+        .footer { position: absolute; bottom: 8mm; left: 15mm; right: 15mm; text-align: center; font-size: 9pt; border-top: 1px solid black; padding-top: 5px; }
+    </style>
+</head>
+<body>
+
+    <div class="control-panel">
+        <h3 style="margin-top:0">⚙️ Pengaturan LJK SD Anugerah Abadi 1</h3>
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+            <label>Mapel: <input type="text" id="inputMapel" value="Matematika" style="width:100%" oninput="update()"></label>
+            <label>Kelas: <input type="text" id="inputKelas" value="V (Lima)" style="width:100%" oninput="update()"></label>
+            <label>Tanggal: <input type="date" id="inputTanggal" style="width:100%" oninput="update()"></label>
+        </div>
+        <div style="display: flex; gap: 20px; align-items: center;">
+            <label><b>Kertas:</b> 
+                <select id="selectPaper" onchange="update()">
+                    <option value="size-a4">A4</option>
+                    <option value="size-f4">F4 / Folio</option>
+                </select>
+            </label>
+            <button onclick="window.print()">🖨️ CETAK SEKARANG</button>
+        </div>
+    </div>
+
+    <div id="paperArea1" class="page size-a4">
+        <div class="header">
+            <h1>SUMATIF AKHIR SEMESTER 2</h1>
+            <h2 style="margin:2px 0; font-size:14pt;">SD ANUGERAH ABADI 1 BENGALON</h2>
+            <p style="margin:0;">Tahun Pelajaran 2025/2026</p>
+        </div>
+
+        <div style="text-align: center; font-weight: bold; margin: 8px 0; font-size: 13pt;">LEMBAR JAWABAN (PILIHAN GANDA)</div>
+
+        <div class="student-box">
+            <table class="info-table">
+                <tr>
+                    <td style="width: 80px; font-weight: bold;">Nama</td>
+                    <td>: ...........................................................</td>
+                    <td class="label-short">Kelas</td>
+                    <td>: <span class="displayKelas" style="font-weight:bold">V (Lima)</span></td>
+                </tr>
+                <tr>
+                    <td class="label-wide">Mata Pelajaran</td>
+                    <td>: <span class="displayMapel" style="font-weight:bold">Informatika</span></td>
+                    <td class="label-short">Tanggal</td>
+                    <td>: <span class="displayTanggal">................................</span></td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="answer-wrapper">
+            <div id="col1" class="column"></div>
+            <div id="col2" class="column"></div>
+        </div>
+
+        <div class="footer">SD Anugerah Abadi 1 Bengalon | Halaman 1</div>
+    </div>
+
+    <div id="paperArea2" class="page size-a4">
+        <div class="header">
+            <h1>SUMATIF AKHIR SEMESTER 2</h1>
+            <h2 style="margin:2px 0; font-size:14pt;">SD ANUGERAH ABADI 1 BENGALON</h2>
+            <p style="margin:0;">Tahun Pelajaran 2025/2026</p>
+        </div>
+
+        <div style="text-align: center; font-weight: bold; margin: 8px 0; font-size: 13pt;">LEMBAR JAWABAN (URAIAN)</div>
+
+        <div class="student-box">
+            <table class="info-table">
+                <tr>
+                    <td style="width: 80px; font-weight: bold;">Nama</td>
+                    <td>: ...........................................................</td>
+                    <td class="label-short">Kelas</td>
+                    <td>: <span class="displayKelas" style="font-weight:bold">V (Lima)</span></td>
+                </tr>
+                <tr>
+                    <td class="label-wide">Mata Pelajaran</td>
+                    <td>: <span class="displayMapel" style="font-weight:bold">Informatika</span></td>
+                    <td class="label-short">Tanggal</td>
+                    <td>: <span class="displayTanggal">................................</span></td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="uraian-title">Jawaban Soal Uraian :</div>
+        <div class="kotak-uraian"></div>
+
+        <div class="footer">SD Anugerah Abadi 1 Bengalon | Halaman 2</div>
+    </div>
+
+    <script>
+        function update() {
+            const mapels = document.querySelectorAll('.displayMapel');
+            const kelas = document.querySelectorAll('.displayKelas');
+            const tanggals = document.querySelectorAll('.displayTanggal');
+
+            mapels.forEach(el => el.innerText = document.getElementById('inputMapel').value);
+            kelas.forEach(el => el.innerText = document.getElementById('inputKelas').value);
+            
+            const tglValue = document.getElementById('inputTanggal').value;
+            if(tglValue) {
+                const d = new Date(tglValue);
+                const options = { day: 'numeric', month: 'long', year: 'numeric' };
+                tanggals.forEach(el => el.innerText = d.toLocaleDateString('id-ID', options));
+            }
+
+            const p1 = document.getElementById('paperArea1');
+            const p2 = document.getElementById('paperArea2');
+            const size = document.getElementById('selectPaper').value;
+            const styleTag = document.getElementById('page-style');
+
+            if(size === 'size-f4') {
+                p1.className = 'page size-f4';
+                p2.className = 'page size-f4';
+                styleTag.innerHTML = '@page { size: 215mm 330mm; margin: 0; }';
+            } else {
+                p1.className = 'page size-a4';
+                p2.className = 'page size-a4';
+                styleTag.innerHTML = '@page { size: A4; margin: 0; }';
+            }
+        }
+
+        function generatePG(start, end, containerId) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = ""; 
+            for (let i = start; i <= end; i++) {
+                const row = document.createElement('div');
+                row.className = 'question-row';
+                row.innerHTML = `
+                    <div class="q-num">${i}.</div>
+                    <div class="options">
+                        <div class="box">A</div>
+                        <div class="box">B</div>
+                        <div class="box">C</div>
+                        <div class="box">D</div>
+                    </div>
+                `;
+                container.appendChild(row);
+            }
+        }
+
+        generatePG(1, 15, 'col1');
+        generatePG(16, 30, 'col2');
+        update();
+    </script>
+</body>
+</html>
