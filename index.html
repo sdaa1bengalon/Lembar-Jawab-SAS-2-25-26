@@ -47,10 +47,10 @@
         /* PG STYLE */
         .answer-wrapper { display: flex; justify-content: center; width: 100%; }
         .column { flex: 1; display: flex; flex-direction: column; align-items: center; }
-        .question-row { display: flex; align-items: center; margin-bottom: 11px; }
+        .question-row { display: flex; align-items: center; margin-bottom: 7px; }
         .q-num { width: 30px; font-weight: bold; text-align: right; margin-right: 15px; font-size: 11pt; }
         .options { display: flex; gap: 10px; }
-        .box { width: 8.2mm; height: 8.2mm; border: 1.5px solid black; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 10pt; }
+        .box { width: 7.8mm; height: 7.8mm; border: 1.5px solid black; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 10pt; }
 
         /* URAIAN STYLE (KOTAK KOSONG) */
         .uraian-title { font-weight: bold; margin-bottom: 10px; font-size: 12pt; }
@@ -69,10 +69,12 @@
 
     <div class="control-panel">
         <h3 style="margin-top:0">⚙️ Pengaturan LJK SD Anugerah Abadi 1</h3>
-        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 15px; margin-bottom: 15px;">
             <label>Mapel: <input type="text" id="inputMapel" value="Matematika" style="width:100%" oninput="update()"></label>
             <label>Kelas: <input type="text" id="inputKelas" value="V (Lima)" style="width:100%" oninput="update()"></label>
             <label>Tanggal: <input type="date" id="inputTanggal" style="width:100%" oninput="update()"></label>
+            <!-- Membatasi min 1 dan max 40 pada elemen input -->
+            <label>Jumlah PG (Max 40): <input type="number" id="inputJumlahPG" value="35" min="1" max="40" style="width:100%" oninput="updateLJK()"></label>
         </div>
         <div style="display: flex; gap: 20px; align-items: center;">
             <label><b>Kertas:</b> 
@@ -92,7 +94,7 @@
             <p style="margin:0;">Tahun Pelajaran 2025/2026</p>
         </div>
 
-        <div style="text-align: center; font-weight: bold; margin: 8px 0; font-size: 13pt;">LEMBAR JAWABAN (PILIHAN GANDA)</div>
+        <div style="text-align: center; font-weight: bold; margin: 8px 0; font-size: 13pt;">LEMBAR JAWABAN (PILILESAN GANDA)</div>
 
         <div class="student-box">
             <table class="info-table">
@@ -202,9 +204,36 @@
             }
         }
 
-        generatePG(1, 15, 'col1');
-        generatePG(16, 30, 'col2');
-        update();
+        function updateLJK() {
+            const inputElement = document.getElementById('inputJumlahPG');
+            let totalSoal = parseInt(inputElement.value);
+            
+            // Validasi ketat jika user mengetik manual angka di luar batas 1 - 40
+            if (totalSoal > 40) {
+                totalSoal = 40;
+                inputElement.value = 40;
+            } else if (totalSoal < 1) {
+                totalSoal = 1;
+                inputElement.value = 1;
+            }
+
+            if (isNaN(totalSoal)) return;
+
+            const half = Math.ceil(totalSoal / 2);
+
+            generatePG(1, half, 'col1');
+            
+            if (totalSoal > 1) {
+                generatePG(half + 1, totalSoal, 'col2');
+            } else {
+                document.getElementById('col2').innerHTML = "";
+            }
+            
+            update();
+        }
+
+        // Jalankan saat pertama kali dimuat
+        updateLJK();
     </script>
 </body>
 </html>
